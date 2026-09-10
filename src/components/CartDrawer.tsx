@@ -186,7 +186,7 @@ export function CartDrawer() {
           aria-label="Checkout"
         >
           <div className="checkout__bar">
-            <button className="drawer__close" onClick={closeCheckout}>
+            <button className="checkout__back" onClick={closeCheckout}>
               Back
             </button>
           </div>

@@ -92,6 +92,13 @@ async function handleCheckout(request: Request, env: Env): Promise<Response> {
         ? { shipping_address_collection: { allowed_countries: ['US'] } }
         : {}),
       return_url: `${origin}/?paid=1`,
+      branding_settings: {
+        background_color: '#000000',
+        button_color: '#F1F0ED',
+        border_style: 'rectangular',
+        font_family: 'inter',
+        display_name: 'ETHAN ANGEL',
+      },
       line_items: lines,
     })
     return json({ clientSecret: session.client_secret }, 200)

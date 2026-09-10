@@ -657,9 +657,23 @@ a.home__stream:hover {
   border-bottom: 1px solid var(--line);
 }
 
+.checkout__back {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  transition: color 0.3s var(--ease);
+}
+
+.checkout__back:hover {
+  color: var(--bone);
+}
+
 .checkout__frame {
   flex: 1;
   overflow: hidden;
+  border-top: 1px solid var(--line);
 }
 
 .checkout__frame iframe {
