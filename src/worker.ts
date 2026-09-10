@@ -87,15 +87,16 @@ async function handleCheckout(request: Request, env: Env): Promise<Response> {
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
+      ui_mode: 'embedded',
       ...(anyPhysical
         ? { shipping_address_collection: { allowed_countries: ['US'] } }
         : {}),
-      success_url: `${origin}/?paid=1`,
-      cancel_url: `${origin}/`,
+      return_url: `${origin}/?paid=1`,
       line_items: lines,
     })
-    return json({ url: session.url }, 200)
-  } catch {
+    return json({ clientSecret: session.client_secret }, 200)
+  } catch (err) {
+    console.error('Checkout error:', err)
     return json({ error: 'Checkout could not be opened. Please try again.' }, 500)
   }
 }

@@ -640,6 +640,41 @@ a.home__stream:hover {
   text-align: center;
 }
 
+.checkout {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px var(--pad);
+  border-bottom: 1px solid var(--line);
+}
+
+.checkout__frame {
+  flex: 1;
+  overflow: hidden;
+}
+
+.checkout__frame iframe {
+  height: 100%;
+}
+
+@media (min-width: 761px) {
+  .checkout__frame iframe {
+    height: 100%;
+    width: min(620px, 100%);
+    margin: 0 auto;
+    max-height: 100%;
+  }
+}
+
 /* ---------------------------------------------------------------- responsive */
 
 @media (max-width: 760px) {

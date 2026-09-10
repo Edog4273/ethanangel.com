@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
-import { checkout } from '../lib/stripe'
+import { openEmbeddedCheckout } from '../lib/stripe'
+import type { EmbeddedCheckout } from '../lib/stripe'
 import { lockScroll } from '../lib/lenis'
 import { VisualPlate } from './VisualPlate'
 
@@ -10,6 +11,10 @@ export function CartDrawer() {
   const cart = useCart()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [checkoutOpen, setCheckoutOpen] = useState(false)
+  const checkoutEl = useRef<HTMLDivElement>(null)
+  const embedded = useRef<EmbeddedCheckout | null>(null)
+  const startedRef = useRef(false)
 
   useEffect(() => {
     lockScroll(cart.open)
@@ -23,15 +28,51 @@ export function CartDrawer() {
     }
   }, [cart.open])
 
-  const onCheckout = async () => {
+  useEffect(() => () => embedded.current?.destroy(), [])
+
+  const startCheckout = async () => {
     setBusy(true)
-    const result = await checkout(cart.entries)
-    setBusy(false)
-    if (!result.ok) {
-      setError(result.message ?? 'Checkout failed.')
-      return
-    }
-    cart.clear()
+    setError('')
+    setCheckoutOpen(true)
+  }
+
+  useEffect(() => {
+    if (!checkoutOpen || startedRef.current || !checkoutEl.current) return
+    startedRef.current = true
+    const target = checkoutEl.current
+    openEmbeddedCheckout(cart.entries, target, {
+      onComplete: () => {
+        embedded.current = null
+        setCheckoutOpen(false)
+        cart.clear()
+        window.location.assign('/?paid=1')
+      },
+    })
+      .then((result) => {
+        setBusy(false)
+        if (!result.ok) {
+          embedded.current?.destroy()
+          embedded.current = null
+          startedRef.current = false
+          setCheckoutOpen(false)
+          setError(result.message ?? 'Checkout failed.')
+        }
+      })
+      .catch(() => {
+        setBusy(false)
+        embedded.current?.destroy()
+        embedded.current = null
+        startedRef.current = false
+        setCheckoutOpen(false)
+        setError('Checkout failed. Please try again.')
+      })
+  }, [checkoutOpen])
+
+  const closeCheckout = () => {
+    embedded.current?.destroy()
+    embedded.current = null
+    startedRef.current = false
+    setCheckoutOpen(false)
   }
 
   const priced = cart.entries.some((e) => e.format.price != null)
@@ -120,7 +161,7 @@ export function CartDrawer() {
                   {error && <p className="drawer__err">{error}</p>}
                   <button
                     className="btn btn--solid drawer__btn"
-                    onClick={onCheckout}
+                    onClick={startCheckout}
                     disabled={busy || !priced}
                   >
                     {busy ? 'Processing…' : 'Checkout'}
@@ -131,6 +172,26 @@ export function CartDrawer() {
             )}
           </motion.aside>
         </>
+      )}
+
+      {checkoutOpen && (
+        <motion.div
+          className="checkout"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Checkout"
+        >
+          <div className="checkout__bar">
+            <button className="drawer__close" onClick={closeCheckout}>
+              Back
+            </button>
+          </div>
+          <div className="checkout__frame" ref={checkoutEl} />
+        </motion.div>
       )}
     </AnimatePresence>
   )
