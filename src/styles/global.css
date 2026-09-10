@@ -1,0 +1,665 @@
+@import "tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--bone);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--bone);
+  color: var(--ink);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+.lenis-dual-scrollbar {
+  display: none;
+}
+
+/* ---------------------------------------------------------------- nav */
+
+.nav {
+  position: fixed;
+  z-index: 40;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px var(--pad);
+  background: var(--bg);
+}
+
+.nav__logo {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--bone);
+}
+
+.nav__right {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.nav__group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav__link {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  transition: color 0.3s var(--ease);
+}
+
+.nav__link:hover {
+  color: var(--bone);
+}
+
+.nav__link.is-active {
+  color: var(--bone);
+}
+
+.nav__cart {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  transition: color 0.3s var(--ease);
+}
+
+.nav__cart:hover {
+  color: var(--bone);
+}
+
+.nav__cart span {
+  color: var(--faint);
+  transition: color 0.3s var(--ease);
+}
+
+.nav__cart:hover span {
+  color: var(--bone);
+}
+
+/* ---------------------------------------------------------------- page */
+
+.page {
+  min-height: 100svh;
+}
+
+/* ---------------------------------------------------------------- home (album) */
+
+.home {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px var(--pad) 90px;
+}
+
+.home__cover {
+  width: min(420px, 72vw);
+}
+
+.home__title {
+  font-size: clamp(28px, 4.2vw, 46px);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  color: var(--bone);
+  margin-top: clamp(28px, 4vh, 44px);
+}
+
+.home__artist {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-top: 12px;
+}
+
+.home__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 36px;
+}
+
+.home__action {
+  min-width: 260px;
+}
+
+.home__streams {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 28px;
+  margin-top: 46px;
+}
+
+.home__stream {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  transition: color 0.3s var(--ease);
+}
+
+a.home__stream:hover {
+  color: var(--bone);
+}
+
+.home__stream--soon {
+  color: var(--faint);
+}
+
+/* ---------------------------------------------------------------- merch */
+
+.merch {
+  padding: clamp(90px, 12vh, 130px) var(--pad) clamp(120px, 16vh, 180px);
+}
+
+.merch__head {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--bone);
+  margin-bottom: clamp(48px, 6vh, 72px);
+}
+
+.merch__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 320px));
+  gap: clamp(44px, 6vw, 84px);
+  justify-content: center;
+}
+
+.merch-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.merch-card--feature {
+  grid-column: 1 / -1;
+  align-items: center;
+}
+
+.merch-card--feature .merch-card__meta {
+  text-align: center;
+  align-items: center;
+}
+
+.merch-card__media {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.merch-card--feature .merch-card__media {
+  max-width: 380px;
+}
+
+.merch-gallery {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+}
+
+.merch-gallery:focus-visible {
+  outline: 1px solid var(--bone);
+  outline-offset: 2px;
+}
+
+.merch-gallery__swap {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s var(--ease);
+}
+
+.merch-gallery--back .merch-gallery__swap {
+  opacity: 1;
+}
+
+.merch-gallery__tabs {
+  display: flex;
+  gap: 22px;
+  margin-top: 14px;
+}
+
+.merch-gallery__tabs button {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--faint);
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+
+.merch-gallery__tabs button:hover {
+  color: var(--dim);
+}
+
+.merch-gallery__tabs button.is-on {
+  color: var(--bone);
+  border-color: var(--dim);
+}
+
+.merch-sizes {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.merch-sizes__btn {
+  min-width: 40px;
+  padding: 9px 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--faint);
+  border: 1px solid var(--line);
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+
+.merch-sizes__btn:hover {
+  border-color: var(--dim);
+  color: var(--dim);
+}
+
+.merch-sizes__btn.is-on {
+  color: var(--bone);
+  border-color: var(--dim);
+}
+
+.merch-card__name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--bone);
+}
+
+.merch-card__note {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-top: 4px;
+}
+
+.merch-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.merch-card__price {
+  color: var(--dim);
+}
+
+/* ---------------------------------------------------------------- plate */
+
+.plate {
+  position: relative;
+  overflow: hidden;
+  background: var(--plate);
+  border: 1px solid var(--line);
+  aspect-ratio: var(--ar, 1 / 1);
+}
+
+.plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------------------------------------------------------------- buttons */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 26px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bone);
+  border: 1px solid var(--dim);
+  transition: border-color 0.3s var(--ease), color 0.3s var(--ease),
+    background 0.3s var(--ease), opacity 0.3s var(--ease);
+}
+
+.btn:hover {
+  border-color: var(--bone);
+}
+
+.btn--solid {
+  background: var(--bone);
+  border-color: var(--bone);
+  color: var(--ink);
+}
+
+.btn--solid:hover {
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--ink);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.btn--fmt {
+  padding: 8px 16px;
+  font-size: 10px;
+}
+
+/* ---------------------------------------------------------------- qty */
+
+.qty {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+}
+
+.qty__btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dim);
+  transition: color 0.3s var(--ease), background 0.3s var(--ease);
+}
+
+.qty__btn:hover {
+  color: var(--bone);
+  background: var(--line);
+}
+
+.qty__val {
+  min-width: 40px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--bone);
+}
+
+/* ---------------------------------------------------------------- drawer */
+
+.drawer__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 51;
+  width: min(420px, 100vw);
+  background: var(--bg);
+  border-left: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px var(--pad);
+  border-bottom: 1px solid var(--line);
+}
+
+.drawer__title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bone);
+}
+
+.drawer__close {
+  color: var(--dim);
+  transition: color 0.3s var(--ease);
+}
+
+.drawer__close:hover {
+  color: var(--bone);
+}
+
+.drawer__list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px var(--pad);
+}
+
+.drawer__empty {
+  padding-top: 40px;
+  text-align: center;
+}
+
+.drawer__empty .btn {
+  margin-top: 20px;
+}
+
+.drawer__item {
+  display: flex;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.drawer__item:last-child {
+  border-bottom: 0;
+}
+
+.drawer__thumb {
+  width: 56px;
+  aspect-ratio: 1;
+  flex: none;
+}
+
+.drawer__meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.drawer__name {
+  font-size: 14px;
+  color: var(--bone);
+}
+
+.drawer__format {
+  font-size: 12px;
+  color: var(--dim);
+}
+
+.drawer__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.drawer__price {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--bone);
+}
+
+.drawer__foot {
+  padding: 22px var(--pad) 28px;
+  border-top: 1px solid var(--line);
+}
+
+.drawer__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.drawer__row span {
+  font-size: 13px;
+  color: var(--dim);
+}
+
+.drawer__total {
+  font-size: 15px;
+  color: var(--bone);
+}
+
+.drawer__btn {
+  width: 100%;
+}
+
+.drawer__err {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-align: center;
+  color: var(--dim);
+  margin-top: 14px;
+}
+
+.drawer__note {
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------- responsive */
+
+@media (max-width: 760px) {
+  .home {
+    padding: 110px var(--pad) 70px;
+  }
+
+  .home__cover {
+    width: min(320px, 74vw);
+  }
+
+  .merch {
+    padding-top: 90px;
+  }
+
+  .nav__right {
+    gap: 16px;
+  }
+
+  .nav__group {
+    gap: 14px;
+  }
+}

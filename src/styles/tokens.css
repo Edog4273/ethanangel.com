@@ -1,0 +1,18 @@
+:root {
+  --bg: #000000;
+  --ink: #000000;
+  --panel: #0b0b0b;
+  --plate: #0d0d0d;
+  --bone: #f1f0ed;
+  --white: #ffffff;
+  --dim: rgba(241, 240, 237, 0.62);
+  --faint: rgba(241, 240, 237, 0.35);
+  --line: rgba(241, 240, 237, 0.12);
+  --line-strong: rgba(241, 240, 237, 0.3);
+
+  --font-body: "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, monospace;
+
+  --pad: clamp(20px, 4vw, 56px);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
