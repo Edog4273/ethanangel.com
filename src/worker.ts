@@ -17,14 +17,18 @@ function resolveItem(productId: string, formatId: string) {
   if (release) {
     const format = release.formats.find((f) => f.id === formatId)
     if (format?.price != null) {
-      return { name: `${release.title} — ${format.label}`, price: format.price }
+      return {
+        name: `${release.title} — ${format.label}`,
+        price: format.price,
+        physical: format.physical ?? true,
+      }
     }
     return null
   }
   const merch = MERCH.find((m) => m.id === productId)
   if (merch) {
     const size = formatId !== merch.id ? formatId : undefined
-    return { name: size ? `${merch.name} — Size ${size}` : merch.name, price: merch.price }
+    return { name: size ? `${merch.name} — Size ${size}` : merch.name, price: merch.price, physical: true }
   }
   return null
 }
@@ -51,6 +55,7 @@ async function handleCheckout(request: Request, env: Env): Promise<Response> {
   const items = (Array.isArray(body?.items) ? body.items : []) as CartItem[]
 
   const lines: LineItem[] = []
+  let anyPhysical = false
 
   for (const it of items) {
     const resolved = it?.productId ? resolveItem(it.productId, it.formatId ?? it.productId) : null
@@ -59,6 +64,8 @@ async function handleCheckout(request: Request, env: Env): Promise<Response> {
     if (!resolved) {
       return json({ error: 'One or more items are not available for purchase.' }, 400)
     }
+
+    if (resolved.physical) anyPhysical = true
 
     lines.push({
       quantity: qty,
@@ -80,6 +87,9 @@ async function handleCheckout(request: Request, env: Env): Promise<Response> {
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
+      ...(anyPhysical
+        ? { shipping_address_collection: { allowed_countries: ['US'] } }
+        : {}),
       success_url: `${origin}/?paid=1`,
       cancel_url: `${origin}/`,
       line_items: lines,

@@ -24,6 +24,7 @@ export type ReleaseFormat = {
   id: string
   label: string
   price?: number
+  physical?: boolean
 }
 
 export type Release = {
@@ -44,7 +45,7 @@ export const ALBUM: Release = {
   ratio: '1 / 1',
   src: '/cover%20art/PLAT%20SOUL..PNG',
   formats: [
-    { id: 'digital', label: 'Digital', price: 9.99 },
+    { id: 'digital', label: 'Digital', price: 9.99, physical: false },
     { id: 'vinyl', label: 'Vinyl', price: 25 },
     { id: 'cd', label: 'CD', price: 15 },
   ],
