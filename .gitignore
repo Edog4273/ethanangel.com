@@ -11,3 +11,7 @@ dist
 *.pem
 id_rsa*
 id_ed25519*
+.dev.vars
+
+# wrangler
+.wrangler/

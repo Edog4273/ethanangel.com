@@ -1,5 +1,5 @@
 import Stripe from 'stripe'
-import { MERCH, RELEASES } from '../../src/data/content'
+import { MERCH, RELEASES } from './data/content'
 
 type CartItem = { productId?: string; formatId?: string; qty?: number }
 
@@ -29,7 +29,10 @@ function resolveItem(productId: string, formatId: string) {
   return null
 }
 
-type Env = { STRIPE_SECRET_KEY?: string }
+type Env = {
+  STRIPE_SECRET_KEY?: string
+  ASSETS: { fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> }
+}
 
 function json(body: unknown, status: number): Response {
   return new Response(JSON.stringify(body), {
@@ -38,13 +41,7 @@ function json(body: unknown, status: number): Response {
   })
 }
 
-export const onRequestPost = async ({
-  request,
-  env,
-}: {
-  request: Request
-  env: Env
-}): Promise<Response> => {
+async function handleCheckout(request: Request, env: Env): Promise<Response> {
   const secret = env.STRIPE_SECRET_KEY
   if (!secret) {
     return json({ error: `The store isn't connected yet.` }, 500)
@@ -91,4 +88,20 @@ export const onRequestPost = async ({
   } catch {
     return json({ error: 'Checkout could not be opened. Please try again.' }, 500)
   }
+}
+
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    const url = new URL(request.url)
+
+    if (url.pathname === '/api/create-checkout-session' && request.method === 'POST') {
+      return handleCheckout(request, env)
+    }
+
+    if (request.method !== 'GET' && request.method !== 'HEAD') {
+      return new Response('Not Found', { status: 404 })
+    }
+
+    return env.ASSETS.fetch(request)
+  },
 }
