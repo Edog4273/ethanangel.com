@@ -87,7 +87,7 @@ async function handleCheckout(request: Request, env: Env): Promise<Response> {
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
-      ui_mode: 'embedded',
+      ui_mode: 'embedded_page',
       ...(anyPhysical
         ? { shipping_address_collection: { allowed_countries: ['US'] } }
         : {}),
