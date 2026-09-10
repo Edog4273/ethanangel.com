@@ -1,0 +1,94 @@
+import Stripe from 'stripe'
+import { MERCH, RELEASES } from '../../src/data/content'
+
+type CartItem = { productId?: string; formatId?: string; qty?: number }
+
+type LineItem = {
+  quantity: number
+  price_data: {
+    currency: string
+    unit_amount: number
+    product_data: { name: string }
+  }
+}
+
+function resolveItem(productId: string, formatId: string) {
+  const release = RELEASES.find((r) => r.id === productId)
+  if (release) {
+    const format = release.formats.find((f) => f.id === formatId)
+    if (format?.price != null) {
+      return { name: `${release.title} — ${format.label}`, price: format.price }
+    }
+    return null
+  }
+  const merch = MERCH.find((m) => m.id === productId)
+  if (merch) {
+    const size = formatId !== merch.id ? formatId : undefined
+    return { name: size ? `${merch.name} — Size ${size}` : merch.name, price: merch.price }
+  }
+  return null
+}
+
+type Env = { STRIPE_SECRET_KEY?: string }
+
+function json(body: unknown, status: number): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'content-type': 'application/json' },
+  })
+}
+
+export const onRequestPost = async ({
+  request,
+  env,
+}: {
+  request: Request
+  env: Env
+}): Promise<Response> => {
+  const secret = env.STRIPE_SECRET_KEY
+  if (!secret) {
+    return json({ error: `The store isn't connected yet.` }, 500)
+  }
+
+  const body = (await request.json().catch(() => null)) as { items?: unknown[] } | null
+  const items = (Array.isArray(body?.items) ? body.items : []) as CartItem[]
+
+  const lines: LineItem[] = []
+
+  for (const it of items) {
+    const resolved = it?.productId ? resolveItem(it.productId, it.formatId ?? it.productId) : null
+    const qty = Math.max(1, Math.min(10, Number(it?.qty) || 1))
+
+    if (!resolved) {
+      return json({ error: 'One or more items are not available for purchase.' }, 400)
+    }
+
+    lines.push({
+      quantity: qty,
+      price_data: {
+        currency: 'usd',
+        unit_amount: Math.round(resolved.price * 100),
+        product_data: { name: resolved.name },
+      },
+    })
+  }
+
+  if (lines.length === 0) {
+    return json({ error: 'Your cart is empty.' }, 400)
+  }
+
+  const stripe = new Stripe(secret)
+  const origin = request.headers.get('origin') ?? 'https://ethanangel.com'
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      success_url: `${origin}/?paid=1`,
+      cancel_url: `${origin}/`,
+      line_items: lines,
+    })
+    return json({ url: session.url }, 200)
+  } catch {
+    return json({ error: 'Checkout could not be opened. Please try again.' }, 500)
+  }
+}
