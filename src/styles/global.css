@@ -658,16 +658,32 @@ a.home__stream:hover {
 }
 
 .checkout__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--dim);
-  transition: color 0.3s var(--ease);
+  cursor: pointer;
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+
+.checkout__back::before {
+  content: "←";
+  font-size: 14px;
+  line-height: 1;
 }
 
 .checkout__back:hover {
   color: var(--bone);
+  border-color: var(--bone);
 }
 
 .checkout__frame {

@@ -94,8 +94,8 @@ async function handleCheckout(request: Request, env: Env): Promise<Response> {
       return_url: `${origin}/?paid=1`,
       branding_settings: {
         background_color: '#000000',
-        button_color: '#F5F0E6',
-        border_style: 'rectangular',
+        button_color: '#F2EADD',
+        border_style: 'rounded',
         font_family: 'inter',
         display_name: 'ETHAN ANGEL',
       },
