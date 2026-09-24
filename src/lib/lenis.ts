@@ -39,3 +39,14 @@ export function scrollTopTo(immediate = true): void {
     window.scrollTo({ top: 0, behavior: immediate ? 'auto' : 'smooth' })
   }
 }
+
+export function scrollToEl(id: string): void {
+  const el = document.getElementById(id)
+  if (!el) return
+  const lenis = getLenis()
+  if (lenis) {
+    lenis.scrollTo(el, { duration: 1.4 })
+  } else {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}

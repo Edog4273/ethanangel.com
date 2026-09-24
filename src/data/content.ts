@@ -37,21 +37,7 @@ export type Release = {
   formats: ReleaseFormat[]
 }
 
-export const ALBUM: Release = {
-  id: 'platinum-soul',
-  title: 'PLATINUM SOUL',
-  year: '2026',
-  status: 'preorder',
-  ratio: '1 / 1',
-  src: '/cover%20art/PLAT%20SOUL..PNG',
-  formats: [
-    { id: 'digital', label: 'Digital', price: 9.99, physical: false },
-    { id: 'vinyl', label: 'Vinyl', price: 25 },
-    { id: 'cd', label: 'CD', price: 15 },
-  ],
-}
-
-export const RELEASES: Release[] = [ALBUM]
+export const RELEASES: Release[] = []
 
 export type MerchItem = {
   id: string
@@ -64,14 +50,4 @@ export type MerchItem = {
   sizes?: string[]
 }
 
-export const MERCH: MerchItem[] = [
-  {
-    id: 'platinum-soul-hoodie',
-    name: 'PLATINUM SOUL Hoodie',
-    price: 100,
-    note: 'Material: 13.5 oz./yd², 100% cotton',
-    src: '/merch/platinum-soul-hoodie-front.png',
-    backSrc: '/merch/platinum-soul-hoodie-back.png',
-    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-  },
-]
+export const MERCH: MerchItem[] = []

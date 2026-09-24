@@ -7,6 +7,11 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App'
 
+document.documentElement.classList.add('js')
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.documentElement.classList.add('reduced')
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />

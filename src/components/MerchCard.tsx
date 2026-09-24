@@ -18,11 +18,11 @@ export function MerchCard({ item }: { item: MerchItem }) {
   const toggleSide = () => setSide(side === 'front' ? 'back' : 'front')
 
   return (
-    <article className={`merch-card${hasGallery ? ' merch-card--feature' : ''}`}>
-      <div className="merch-card__media">
+    <article className="merch-card">
+      <div className="merch-card__piece">
         {hasGallery ? (
           <div
-            className={`merch-gallery${side === 'back' ? ' merch-gallery--back' : ''}`}
+            className={`merch-piece${side === 'back' ? ' merch-piece--back' : ''}`}
             role="button"
             tabIndex={0}
             aria-label={`Show ${side === 'front' ? 'back' : 'front'} of ${item.name}`}
@@ -35,59 +35,57 @@ export function MerchCard({ item }: { item: MerchItem }) {
             }}
           >
             <VisualPlate ratio={item.ratio ?? '1 / 1'} src={item.src} alt={`${item.name} front`} />
-            <div className="merch-gallery__swap">
+            <span className="merch-piece__swap">
               <VisualPlate ratio="1 / 1" src={item.backSrc} alt={`${item.name} back`} />
-            </div>
+            </span>
           </div>
         ) : (
           <VisualPlate ratio={item.ratio ?? '1 / 1'} src={item.src} alt={item.name} />
         )}
 
         {hasGallery && (
-          <div className="merch-gallery__tabs">
+          <div className="merch-piece__flip">
             <button
               className={side === 'front' ? 'is-on' : undefined}
               aria-pressed={side === 'front'}
               onClick={() => setSide('front')}
             >
-              Front
+              front
             </button>
             <button
               className={side === 'back' ? 'is-on' : undefined}
               aria-pressed={side === 'back'}
               onClick={() => setSide('back')}
             >
-              Back
+              back
             </button>
           </div>
         )}
       </div>
 
-      <div className="merch-card__meta">
+      <div className="merch-card__data">
         <h3 className="merch-card__name">{item.name}</h3>
         {item.note && <p className="merch-card__note">{item.note}</p>}
-
-        {item.sizes?.length ? (
-          <div className="merch-sizes" role="group" aria-label="Size">
-            {item.sizes.map((s) => (
-              <button
-                key={s}
-                className={`merch-sizes__btn${size === s ? ' is-on' : ''}`}
-                aria-pressed={size === s}
-                onClick={() => setSize(s)}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        ) : null}
-      </div>
-
-      <div className="merch-card__foot">
-        <span className="merch-card__price">${item.price.toFixed(2)}</span>
-        <button className="btn btn--fmt" onClick={add}>
-          Add
-        </button>
+        <div className="merch-card__row">
+          {item.sizes?.length ? (
+            <div className="merch-sizes" role="group" aria-label="Size">
+              {item.sizes.map((s) => (
+                <button
+                  key={s}
+                  className={`merch-sizes__btn${size === s ? ' is-on' : ''}`}
+                  aria-pressed={size === s}
+                  onClick={() => setSize(s)}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          ) : null}
+          <span className="merch-card__price">${item.price.toFixed(2)}</span>
+          <button className="merch-card__add" onClick={add}>
+            Add
+          </button>
+        </div>
       </div>
     </article>
   )
