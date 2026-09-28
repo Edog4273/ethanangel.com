@@ -1,23 +1,27 @@
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
-import { scrollToEl } from '../lib/lenis'
+import { jumpTo } from '../lib/jump'
+import { scrollTopTo } from '../lib/lenis'
 
 export function Navigation() {
   const cart = useCart()
   const navigate = useNavigate()
 
-  const jump = (e: React.MouseEvent, id: string) => {
+  const home = (e: React.MouseEvent) => {
     e.preventDefault()
-    if (document.getElementById(id)) scrollToEl(id)
-    else navigate({ pathname: '/', hash: `#${id}` })
+    if (window.location.pathname === '/') scrollTopTo(false)
+    else navigate('/')
   }
 
   return (
     <header className="nav">
-      <a href="#music" className="nav__link" onClick={(e) => jump(e, 'music')}>
+      <a href="/" className="nav__brand" onClick={home}>
+        Ethan Angel
+      </a>
+      <a href="#music" className="nav__link" onClick={(e) => jumpTo(e, 'music', navigate)}>
         Music
       </a>
-      <a href="#merch" className="nav__link" onClick={(e) => jump(e, 'merch')}>
+      <a href="#merch" className="nav__link" onClick={(e) => jumpTo(e, 'merch', navigate)}>
         Merch
       </a>
       <button className="nav__cart" onClick={cart.openCart} aria-label="Open cart">

@@ -1,25 +1,22 @@
 :root {
   --bg: #000000;
   --ink: #000000;
-  --panel: #0b0b0b;
+  --panel: #0a0a0a;
   --plate: #0d0d0d;
   --bone: #f1f0ed;
   --white: #ffffff;
   --dim: rgba(241, 240, 237, 0.62);
-  --faint: rgba(241, 240, 237, 0.35);
+  --faint: rgba(241, 240, 237, 0.52);
   --line: rgba(241, 240, 237, 0.12);
   --line-strong: rgba(241, 240, 237, 0.3);
-
-  --paper: #edebe4;
-  --paper-ink: #191815;
-  --paper-line: rgba(25, 24, 21, 0.22);
-
-  --crimson: #a3122b;
-  --cobalt: #33407a;
 
   --font-body: "Space Grotesk", system-ui, sans-serif;
   --font-mono: "Space Mono", ui-monospace, monospace;
 
   --pad: clamp(20px, 4vw, 56px);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --t-display: clamp(54px, 8vw, 132px);
+  --t-name: clamp(56px, 9vw, 152px);
+  --t-kicker: 9.5px;
 }
